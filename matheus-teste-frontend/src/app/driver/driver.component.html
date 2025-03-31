@@ -1,0 +1,25 @@
+<div class="row p-4">
+  <div class="col-6">
+    <div>
+      <h1 class="title">Motoristas</h1>
+      <p class="mt-2">Aqui você pode criar, visualizar e editar o status de um motorista.</p>
+    </div>
+  </div>
+
+  <div class="col-6 d-flex justify-content-end align-items-center">
+    <app-create-driver-modal (attTable)="getDrivers()"></app-create-driver-modal>
+  </div>
+</div>
+
+
+
+<div class="p-4">
+  <app-generic-table 
+    (changeStatus)="changeStatusDriver($event)" 
+    (deleteCol)="deleteDriver($event)" 
+    [loading]="loading"
+    [cols]="tableCols" 
+    [data]="drivers"
+  >
+  </app-generic-table>
+</div>

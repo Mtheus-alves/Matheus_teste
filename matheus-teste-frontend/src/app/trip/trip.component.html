@@ -1,0 +1,23 @@
+<div class="row p-4">
+    <div class="col-6">
+        <div>
+            <h1 class="title">Corridas</h1>
+            <p class="mt-2"> Crie e visualize corridas. É necessário ter pelo menos um motorista e um passageiro cadastrados.</p>
+        </div>
+    </div>
+
+    <div class="col-6 d-flex justify-content-end align-items-center">
+        <app-create-trip-modal (attTable)="getTrips()"></app-create-trip-modal>
+    </div>
+</div>
+
+
+<div class="p-4">
+    <app-generic-table 
+      (deleteCol)="deleteTrip($event)" 
+      [loading]="loading"
+      [cols]="tableCols" 
+      [data]="trips"
+    >
+    </app-generic-table>
+</div>

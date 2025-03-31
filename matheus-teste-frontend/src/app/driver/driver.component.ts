@@ -30,11 +30,11 @@ export class DriverComponent implements OnInit {
   constructor(private driverService: DriverService, private datePipe: DatePipe, private messageService: MessageService) { }
 
   ngOnInit() {
-    console.log("AAAAAAAAAAAAAAAAAAAAAAAA")
     this.getDrivers()
   }
 
   getDrivers() {
+    console.log("getDrivers")
     this.loading = true;
     this.driverService.getDrivers().subscribe({
       next: (res) => {

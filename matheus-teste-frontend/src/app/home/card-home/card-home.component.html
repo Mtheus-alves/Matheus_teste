@@ -1,0 +1,15 @@
+<div class="card p-4">
+  <p-card [header]="header" [style]="{ width: '25rem', height: '20rem', overflow: 'hidden' }">
+    <div class="d-flex justify-content-center align-items-center">
+      <p class="p-4 text-center">
+        {{desc}}
+      </p>
+    </div>
+
+    <ng-template pTemplate="footer">
+      <div class="d-flex justify-content-center mt-auto">
+      <p-button (click)="changePage()" class="mt-3 btn-create" label="Adicionar"></p-button>
+      </div>
+    </ng-template>
+  </p-card>
+</div>

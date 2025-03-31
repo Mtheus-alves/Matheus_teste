@@ -1,0 +1,16 @@
+:host ::ng-deep {
+    .card {
+        border: none;
+    }
+
+    .p-card {
+        .p-card-title {
+            display: flex;
+            justify-content: center;
+        }
+    }
+}
+
+.btn-card {
+    
+}

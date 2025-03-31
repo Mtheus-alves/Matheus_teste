@@ -1,0 +1,22 @@
+<div class="row p-4">
+  <div class="col-6">
+    <div>
+      <h1 class="title">Passageiros</h1>
+      <p class="mt-2">Aqui você pode criar e visualizar passageiros.</p>
+    </div>
+  </div>
+
+  <div class="col-6 d-flex justify-content-end align-items-center">
+    <app-create-passanger-modal (attTable)="getPassangers()"></app-create-passanger-modal>
+  </div>
+</div>
+
+<div class="p-4">
+  <app-generic-table 
+    (deleteCol)="deletePassanger($event)" 
+    [loading]="loading"
+    [cols]="tableCols" 
+    [data]="passangers"
+  >
+  </app-generic-table>
+</div>

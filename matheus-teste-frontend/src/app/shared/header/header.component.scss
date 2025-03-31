@@ -1,0 +1,32 @@
+header {
+  background-color: black;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+  padding: 30px;
+  color: white;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+ul {
+  list-style-type: none;
+  overflow: hidden;
+  margin: 0
+}
+
+li {
+  float: left;
+}
+
+li a {
+  padding: 16px;
+  text-decoration: none;
+  color: white;
+
+  &:hover{
+    border: 2px solid #047e4f;
+  }
+}

@@ -1,0 +1,47 @@
+<p-table 
+  *ngIf="data.length > 0"
+  [loading]=loading 
+  [value]="data"
+>
+  <ng-template #header>
+    <tr>
+      <th [pSortableColumn]="col.field" *ngFor="let col of cols">{{ col.header }} <p-sortIcon [field]="col.field" /></th>
+      <th style="width: 5rem"></th>
+    </tr>
+  </ng-template>
+
+  <ng-template #body let-row>
+    <tr>
+      <ng-container *ngFor="let col of cols">
+        <td *ngIf="col.field !== 'status'">
+          {{ row[col.field] }}
+        </td>
+        <td class="" *ngIf="col.field == 'status'">
+          <div class="d-flex align-items-center">
+            {{ row[col.field] == true? 'Ativo ': 'Inativo' }}
+            <p-toggleswitch
+              class="d-flex ms-1" 
+              [(ngModel)]="row.status" 
+              (onChange)="onStatusChange($event,row.idDriver)"
+            >
+              <ng-template #handle let-checked="checked">
+                  <i [ngClass]="['!text-xs', 'pi', checked ? 'pi-check' : 'pi-times']"></i>
+              </ng-template>
+            </p-toggleswitch>
+          </div>
+         
+        </td>
+      </ng-container>
+    
+      
+      <td>
+        <p-button icon="pi pi-trash" (click)="delete(row)" severity="secondary" rounded />
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+
+<div *ngIf="data.length === 0" class="text-center">
+  <h3 class="no-data p-4">Nenhum dado disponível. Clique no botão para adicionar um novo registro.</h3>
+</div>

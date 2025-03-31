@@ -1,1 +1,1 @@
-web: npm install && npx serve -s dist/matheus-teste-frontend
+web: npm install && ng build --prod && npx serve -s dist/nome-do-seu-projeto

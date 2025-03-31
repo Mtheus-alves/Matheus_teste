@@ -1,0 +1,1 @@
+web: npm install && ng build --configuration production && npx serve -s dist/nome-do-seu-projeto

@@ -1,1 +1,0 @@
-web: cd matheus_teste_backend && mvn spring-boot:run

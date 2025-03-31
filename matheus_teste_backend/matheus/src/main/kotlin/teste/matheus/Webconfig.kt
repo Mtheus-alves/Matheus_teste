@@ -11,7 +11,7 @@ class WebConfig : WebMvcConfigurer {
 
     override fun addCorsMappings(registry: CorsRegistry) {
         registry.addMapping("/**") 
-            .allowedOriginPatterns("*")
+            .allowedOrigins("https://matheus-teste.vercel.app, http://matheus-teste.vercel.app")
             .allowedMethods("GET", "POST", "PUT", "DELETE") 
             .allowedHeaders("*") 
             .allowCredentials(true) 

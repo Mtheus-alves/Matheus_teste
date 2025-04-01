@@ -32,7 +32,6 @@ export class PassangerComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     try {
-      console.log("Chamando getPassangers no ngOnInit");
       this.getPassangers();
     } catch (error) {
       console.error('Erro no ngOnInit', error);

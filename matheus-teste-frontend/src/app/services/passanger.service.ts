@@ -8,7 +8,7 @@ import { Passanger } from '../passanger/Passanger';
 })
 export class PassangerService {
 
-  private url: string = "https://backend-production-2825.up.railway.app/passanger"
+  private url: string = "https://backend-production-ed46.up.railway.app/passanger"
 
   constructor(private http: HttpClient) { }
 

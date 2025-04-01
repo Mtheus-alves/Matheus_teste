@@ -90,7 +90,7 @@ export class CreateTripModalComponent implements OnInit, OnDestroy {
           this.attTable.emit()
         },
         error: () => {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Erro ao cadastrar motorista!' });
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Erro ao adicionar corrida!' });
         }
       }));
 

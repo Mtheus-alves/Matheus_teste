@@ -8,7 +8,7 @@ import { Driver } from '../driver/driver';
 })
 export class DriverService {
 
-  private url: string = "https://backend-production-2825.up.railway.app/driver"
+  private url: string = "https://backend-production-ed46.up.railway.app/driver"
 
   constructor(private http: HttpClient) { }
 

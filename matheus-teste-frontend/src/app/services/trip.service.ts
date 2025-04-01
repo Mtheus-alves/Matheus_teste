@@ -9,7 +9,7 @@ import { Trip } from '../trip/trip';
 })
 export class TripService {
 
-  private url: string = "https://backend-production-2825.up.railway.app/trip"
+  private url: string = "https://backend-production-ed46.up.railway.app/trip"
 
   constructor(private http: HttpClient) { }
 

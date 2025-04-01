@@ -22,7 +22,7 @@ data class Trip (
 
     @field:NotNull
     @Column(name = "start_address")
-    var startAddress: String? = null
+    var startAddress: String? = null,
 
     @field:NotNull
     @Column(name = "end_address")

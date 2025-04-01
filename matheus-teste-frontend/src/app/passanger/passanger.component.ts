@@ -7,11 +7,12 @@ import { PassangerService } from '../services/passanger.service';
 import { DatePipe } from '@angular/common';
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-passanger',
   templateUrl: './passanger.component.html',
-  imports: [CreatePassangerModalComponent, GenericTableComponent],
+  imports: [CreatePassangerModalComponent, GenericTableComponent, ToastModule],
   providers: [DatePipe, MessageService],
   styleUrls: ['./passanger.component.scss']
 })

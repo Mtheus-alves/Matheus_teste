@@ -7,11 +7,12 @@ import { GenericTableCols } from '../shared/generic-table-cols';
 import { DatePipe } from '@angular/common';
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-driver',
   templateUrl: './driver.component.html',
-  imports: [CreateDriverModalComponent, GenericTableComponent],
+  imports: [CreateDriverModalComponent, GenericTableComponent, ToastModule],
   providers: [DatePipe, MessageService],
   styleUrls: ['./driver.component.scss']
 })

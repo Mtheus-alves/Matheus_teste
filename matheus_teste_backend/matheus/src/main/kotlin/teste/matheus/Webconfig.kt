@@ -1,4 +1,3 @@
-
 package teste.matheus
  
  import org.springframework.context.annotation.Configuration
@@ -7,13 +6,11 @@ package teste.matheus
  
  @Configuration
  class CorsConfig : WebMvcConfigurer {
- 
-    override fun addCorsMappings(registry: CorsRegistry) {
-          registry.addMapping("/**") 
-              .allowedOrigins("http://localhost:4200")
-              .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") 
-              .allowedHeaders("*")  
-              .allowCredentials(true) 
-              .maxAge(3600)
-      }
+     override fun addCorsMappings(registry: CorsRegistry) {
+         registry.addMapping("/**")
+             .allowedOriginPatterns("*")  // Permite qualquer origem
+             .allowedMethods("*")  // Permite todos os métodos
+             .allowedHeaders("*")  // Permite todos os headers
+             .allowCredentials(true)
+     }
  }

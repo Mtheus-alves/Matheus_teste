@@ -11,7 +11,7 @@ interface TripRepository : CrudRepository<Trip, Long> {
     @Query(
         value = """
             SELECT 
-                NEW teste.matheus.Dto.TripDTO(t.idTrip,d.nmDriver,p.nmPassanger,t.tripValue)
+                NEW teste.matheus.Dto.TripDTO(t.idTrip,d.nmDriver,p.nmPassanger,t.startAddress,t.endAddresst.tripValue)
             FROM 
                 Trip t
             INNER JOIN 

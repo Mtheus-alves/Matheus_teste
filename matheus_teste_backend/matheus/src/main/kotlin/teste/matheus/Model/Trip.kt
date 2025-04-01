@@ -21,6 +21,10 @@ data class Trip (
     var idPassanger: Long? = null,
 
     @field:NotNull
-    @Column(name = "trip_value")
-    var tripValue: BigDecimal? = null
+    @Column(name = "start_address")
+    var startAddress: String? = null
+
+    @field:NotNull
+    @Column(name = "end_address")
+    var startAddress: String? = null
 )

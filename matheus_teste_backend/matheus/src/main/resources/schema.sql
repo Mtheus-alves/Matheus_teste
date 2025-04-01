@@ -21,6 +21,8 @@ create table if not exists trip(
                                 id_trip serial primary key,
                                 id_driver int,
                                 id_passanger int,
+                                start_address varchar(255),
+                                end_address varchar(255),
                                 trip_value numeric,
                                 CONSTRAINT fk_id_driver FOREIGN KEY(id_driver) REFERENCES driver(id_driver),
                                 CONSTRAINT fk_id_passanger FOREIGN KEY(id_passanger) REFERENCES passanger(id_passanger)

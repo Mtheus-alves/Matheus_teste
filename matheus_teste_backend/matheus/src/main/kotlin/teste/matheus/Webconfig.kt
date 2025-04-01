@@ -8,11 +8,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 class CorsConfig : WebMvcConfigurer {
 
    override fun addCorsMappings(registry: CorsRegistry) {
-         registry.addMapping("/**") 
-             .allowedOrigins("http://localhost:4200", "https://matheus-teste.vercel.app")
-             .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") 
-             .allowedHeaders("*")  
-             .allowCredentials(true) 
-             .maxAge(3600)
-     }
+       registry.addMapping("/**")
+           .allowedOrigins("*")  // Permite qualquer origem
+           .allowedMethods("*")  // Permite todos os métodos
+           .allowedHeaders("*")  // Permite todos os headers
+           .allowCredentials(false) // Desativa credenciais por segurança
+           .maxAge(3600) // Cache do preflight por 1 hora
+   }
 }

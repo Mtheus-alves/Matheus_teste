@@ -31,7 +31,12 @@ export class PassangerComponent implements OnInit, OnDestroy {
   constructor(private passangerService: PassangerService, private datePipe: DatePipe, private messageService: MessageService) { }
 
   ngOnInit() {
-    this.getPassangers()
+    try {
+      console.log("Chamando getPassangers no ngOnInit");
+      this.getPassangers();
+    } catch (error) {
+      console.error('Erro no ngOnInit', error);
+    }
   }
 
   ngOnDestroy() {

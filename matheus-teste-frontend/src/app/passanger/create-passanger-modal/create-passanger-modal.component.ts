@@ -57,11 +57,11 @@ export class CreatePassangerModalComponent implements OnInit, OnDestroy {
           this.formPassanger.reset();
           this.loading = false;
           this.visible = false
-          this.messageService.add({ severity: 'success', summary: 'Sucesso!', detail: 'Motorista criado com sucesso!' });
+          this.messageService.add({ severity: 'success', summary: 'Sucesso!', detail: 'Passageiro criado com sucesso!' });
           this.attTable.emit()
         },
         error: () => {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Erro ao cadastrar motorista!' });
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Erro ao cadastrar passageiro!' });
         }
       }));
 

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { Passanger } from '../Passanger';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PassangerService } from '../../services/passanger.service';
@@ -10,6 +10,7 @@ import { ButtonModule } from 'primeng/button';
 import { Dialog } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-create-passanger-modal',
@@ -18,8 +19,9 @@ import { SelectModule } from 'primeng/select';
   imports: [Dialog, ButtonModule, InputTextModule, SelectModule, ReactiveFormsModule, CommonModule, ToastModule, NgxMaskDirective],
   styleUrls: ['./create-passanger-modal.component.scss']
 })
-export class CreatePassangerModalComponent implements OnInit {
+export class CreatePassangerModalComponent implements OnInit, OnDestroy {
   @Output() attTable: EventEmitter<any> = new EventEmitter();
+  subscription: Subscription = new Subscription()
 
   loading: boolean = false
   passanger: Passanger = { cpf: "", dtBirth: "", gender: "", nmPassanger: "" }
@@ -27,6 +29,9 @@ export class CreatePassangerModalComponent implements OnInit {
   visible: boolean = false;
 
   constructor(private formBuilder: FormBuilder, private passangerService: PassangerService, private messageService: MessageService, private datePipe: DatePipe) { }
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe()
+  }
 
   ngOnInit() {
     this.formPassanger = this.formBuilder.group({
@@ -37,7 +42,7 @@ export class CreatePassangerModalComponent implements OnInit {
     });
   }
 
-showDialog() {
+  showDialog() {
     this.visible = true;
   }
 
@@ -47,7 +52,7 @@ showDialog() {
 
     if (this.formPassanger.valid) {
       this.passanger.dtBirth = this.datePipe.transform(new Date(this.passanger.dtBirth = `${this.passanger.dtBirth.substring(4, 8)}-${this.passanger.dtBirth.substring(2, 4)}-${this.passanger.dtBirth.substring(0, 2)}`), 'yyyy-MM-dd') || '';
-      this.passangerService.postPassanger(this.passanger).subscribe({
+      this.subscription.add(this.passangerService.postPassanger(this.passanger).subscribe({
         next: () => {
           this.formPassanger.reset();
           this.loading = false;
@@ -58,7 +63,7 @@ showDialog() {
         error: () => {
           this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Erro ao cadastrar motorista!' });
         }
-      });
+      }));
 
     }
 

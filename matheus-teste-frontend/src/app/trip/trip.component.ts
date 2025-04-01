@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { GenericTableComponent } from '../shared/generic-table/generic-table.component';
 import { CreateTripModalComponent } from "./create-trip-modal/create-trip-modal.component";
 import { TripService } from '../services/trip.service';
 import { TripDTO } from './tripDTO';
 import { GenericTableCols } from '../shared/generic-table-cols';
 import { CurrencyPipe } from '@angular/common';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-trip',
@@ -13,9 +14,11 @@ import { CurrencyPipe } from '@angular/common';
   providers: [CurrencyPipe],
   styleUrls: ['./trip.component.scss']
 })
-export class TripComponent implements OnInit {
+export class TripComponent implements OnInit, OnDestroy {
   trips: TripDTO[] = []
   loading: boolean = false
+  subscription: Subscription = new Subscription()
+
 
   tableCols: GenericTableCols[] = [
     { field: 'nmDriver', header: 'Nome do Motorista' },
@@ -24,6 +27,10 @@ export class TripComponent implements OnInit {
   ]
 
   constructor(private tripService: TripService, private currencyPipe: CurrencyPipe) { }
+  
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe()
+  }
 
   ngOnInit() {
     this.getTrips()
@@ -31,7 +38,7 @@ export class TripComponent implements OnInit {
 
   getTrips() {
     this.loading = true;
-    this.tripService.getTrips().subscribe({
+    this.subscription.add(this.tripService.getTrips().subscribe({
       next: (res) => {
         this.trips = res.map((trip: TripDTO) => ({
           ...trip,
@@ -43,11 +50,11 @@ export class TripComponent implements OnInit {
         console.error('Erro ao buscar motoristas', err);
         this.loading = false;
       }
-    });
+    }));
   }
 
-  deleteTrip(trip: TripDTO){
-    this.tripService.deleteTrip(trip.idTrip).subscribe({
+  deleteTrip(trip: TripDTO) {
+    this.subscription.add(this.tripService.deleteTrip(trip.idTrip).subscribe({
       next: () => {
         this.getTrips()
       },
@@ -55,7 +62,7 @@ export class TripComponent implements OnInit {
         console.error('Erro ao deletar motorista', err);
         this.loading = false;
       }
-    })
+    }))
   }
 
 }

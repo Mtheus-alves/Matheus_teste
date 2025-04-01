@@ -13,7 +13,6 @@ export class DriverService {
   constructor(private http: HttpClient) { }
 
   getDrivers(): Observable<any> {
-    console.log("service")
     return this.http.get<any[]>(this.url).pipe(
       catchError(this.handleError)
     );

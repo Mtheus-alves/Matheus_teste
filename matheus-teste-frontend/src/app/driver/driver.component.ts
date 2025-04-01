@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CreateDriverModalComponent } from './create-driver-modal/create-driver-modal.component';
 import { GenericTableComponent } from '../shared/generic-table/generic-table.component';
 import { DriverService } from '../services/driver.service';
@@ -6,6 +6,7 @@ import { Driver } from './driver';
 import { GenericTableCols } from '../shared/generic-table-cols';
 import { DatePipe } from '@angular/common';
 import { MessageService } from 'primeng/api';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-driver',
@@ -14,7 +15,8 @@ import { MessageService } from 'primeng/api';
   providers: [DatePipe, MessageService],
   styleUrls: ['./driver.component.scss']
 })
-export class DriverComponent implements OnInit {
+export class DriverComponent implements OnInit, OnDestroy {
+  subscription: Subscription = new Subscription()
   drivers: Driver[] = []
   loading: boolean = false
 
@@ -29,14 +31,17 @@ export class DriverComponent implements OnInit {
 
   constructor(private driverService: DriverService, private datePipe: DatePipe, private messageService: MessageService) { }
 
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe
+  }
+
   ngOnInit() {
     this.getDrivers()
   }
 
   getDrivers() {
-    console.log("getDrivers")
     this.loading = true;
-    this.driverService.getDrivers().subscribe({
+    this.subscription.add(this.driverService.getDrivers().subscribe({
       next: (res) => {
         this.drivers = res.map((driver: Driver) => ({
           ...driver,
@@ -49,7 +54,7 @@ export class DriverComponent implements OnInit {
         console.error('Erro ao buscar motoristas', err);
         this.loading = false;
       }
-    });
+    }));
   }
 
   private formatDate(date: string): string | null {
@@ -57,7 +62,7 @@ export class DriverComponent implements OnInit {
   }
 
   deleteDriver(driver: Driver) {
-    this.driverService.deleteDriver(driver.idDriver!).subscribe({
+    this.subscription.add(this.driverService.deleteDriver(driver.idDriver!).subscribe({
       next: () => {
         this.getDrivers()
       },
@@ -65,11 +70,11 @@ export class DriverComponent implements OnInit {
         this.messageService.add({ severity: 'error', summary: 'Erro ao apagar motorista!', detail: 'É necessário apagar as corridas associadas a este motorista.' });
         this.loading = false;
       }
-    })
+    }))
   }
 
   changeStatusDriver(event: { status: boolean, idDriver: number }) {
-    this.driverService.putStatusDriver(event.idDriver, event.status).subscribe({
+    this.subscription.add(this.driverService.putStatusDriver(event.idDriver, event.status).subscribe({
       next: () => {
         this.getDrivers()
       },
@@ -77,7 +82,7 @@ export class DriverComponent implements OnInit {
         console.error('Erro ao atualizar status do motorista', err);
         this.loading = false;
       }
-    })
+    }))
   }
 
 }

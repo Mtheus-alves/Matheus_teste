@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { TripService } from '../../services/trip.service';
 import { PassangerService } from '../../services/passanger.service';
 import { DriverService } from '../../services/driver.service';
@@ -14,6 +14,7 @@ import { ToastModule } from 'primeng/toast';
 import { Driver } from '../../driver/driver';
 import { Passanger } from '../../passanger/Passanger';
 import { Trip } from '../trip';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-create-trip-modal',
@@ -22,9 +23,10 @@ import { Trip } from '../trip';
   imports: [Dialog, ButtonModule, InputTextModule, SelectModule, ReactiveFormsModule, CommonModule, ToastModule, NgxMaskDirective],
   styleUrls: ['./create-trip-modal.component.scss']
 })
-export class CreateTripModalComponent implements OnInit {
+export class CreateTripModalComponent implements OnInit, OnDestroy {
   @Output() attTable: EventEmitter<any> = new EventEmitter();
   loading: boolean = false
+  subscription: Subscription = new Subscription()
 
   drivers: Driver[] = []
   passangers: Passanger[] = []
@@ -33,6 +35,9 @@ export class CreateTripModalComponent implements OnInit {
   formTrip!: FormGroup;
 
   constructor(private formBuilder: FormBuilder, private tripService: TripService, private passangerService: PassangerService, private driverService: DriverService, private messageService: MessageService) { }
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe()
+  }
 
   ngOnInit() {
     this.getDrivers()
@@ -50,25 +55,25 @@ export class CreateTripModalComponent implements OnInit {
   }
 
   getDrivers() {
-    this.driverService.getDrivers().subscribe({
+    this.subscription.add(this.driverService.getDrivers().subscribe({
       next: (res) => {
         this.drivers = res.filter((driver: Driver) => driver.status === true);
       },
       error: (err) => {
         console.error('Erro ao buscar motoristas', err);
       }
-    });
+    }));
   }
 
   getPassangers() {
-    this.passangerService.getPassangers().subscribe({
+    this.subscription.add(this.passangerService.getPassangers().subscribe({
       next: (res) => {
         this.passangers = res
       },
       error: (err) => {
         console.error('Erro ao buscar passageiros', err);
       }
-    });
+    }));
   }
 
   onSubmit() {
@@ -76,7 +81,7 @@ export class CreateTripModalComponent implements OnInit {
     this.trip = this.formTrip.value
 
     if (this.formTrip.valid) {
-      this.tripService.postTrip(this.trip).subscribe({
+      this.subscription.add(this.tripService.postTrip(this.trip).subscribe({
         next: () => {
           this.formTrip.reset();
           this.loading = false;
@@ -87,7 +92,7 @@ export class CreateTripModalComponent implements OnInit {
         error: () => {
           this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Erro ao cadastrar motorista!' });
         }
-      });
+      }));
 
     }
 

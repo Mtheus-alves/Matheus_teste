@@ -1,49 +1,35 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-
-declare const google: any;
 
 @Injectable({
   providedIn: 'root',
 })
 export class AddressService {
-  constructor() {}
+  private corsProxy: string = 'https://cors-anywhere.herokuapp.com/';
+  private placesUrl: string = `${this.corsProxy}https://maps.googleapis.com/maps/api/place/autocomplete/json`;
+  private distanceUrl: string = `${this.corsProxy}https://maps.googleapis.com/maps/api/distancematrix/json`;
+  private key: string = 'AIzaSyDFrkGbDP4c2Dowk80qjflJKXb1jNco5T8';
+
+  constructor(private http: HttpClient) {}
 
   getAddresses(address: string): Observable<any> {
-    return new Observable((observer) => {
-      const autocompleteService = new google.maps.places.AutocompleteService();
-      autocompleteService.getPlacePredictions(
-        { input: address },
-        (predictions: any, status: any) => {
-          if (status === google.maps.places.PlacesServiceStatus.OK) {
-            observer.next(predictions);
-            observer.complete();
-          } else {
-            observer.error(status);
-          }
-        }
-      );
-    });
+    const params = {
+      input: address,
+      key: this.key,
+    };
+
+    return this.http.get(this.placesUrl, { params });
   }
 
   getDistanceBetweenAddresses(origin: string, destination: string): Observable<any> {
-    return new Observable((observer) => {
-      const service = new google.maps.DistanceMatrixService();
-      service.getDistanceMatrix(
-        {
-          origins: [origin],
-          destinations: [destination],
-          travelMode: google.maps.TravelMode.DRIVING,
-        },
-        (response: any, status: any) => {
-          if (status === google.maps.DistanceMatrixStatus.OK) {
-            observer.next(response);
-            observer.complete();
-          } else {
-            observer.error(status);
-          }
-        }
-      );
-    });
+    const params = {
+      destinations: destination,
+      origins: origin,
+      mode: 'driving',
+      key: this.key,
+    };
+
+    return this.http.get(this.distanceUrl, { params });
   }
 }

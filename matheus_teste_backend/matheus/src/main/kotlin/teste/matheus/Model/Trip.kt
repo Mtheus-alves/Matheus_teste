@@ -26,5 +26,5 @@ data class Trip (
 
     @field:NotNull
     @Column(name = "end_address")
-    var startAddress: String? = null
+    var endAddress: String? = null
 )

@@ -1,29 +1,40 @@
 <p-button class="btn-create" (click)="showDialog()" icon="pi pi-plus" label="Nova corrida" />
 
-<p-dialog 
-  header="Criar corrida" 
-  [modal]="true" 
-  [(visible)]="visible" 
+<p-dialog
+  header="Criar corrida"
+  [modal]="true"
+  [(visible)]="visible"
   [style]="{width: '40rem'}"
 >
+
+<div class="alert alert-warning mb-3">
+  <p>
+    Para usar este serviço, por favor, ative o proxy CORS clicando no link abaixo e pressionando o botão
+    <strong>"Request temporary access to the demo server"</strong>:
+  </p>
+  <a href="https://cors-anywhere.herokuapp.com/corsdemo" target="_blank">
+    Ativar Proxy CORS
+  </a>
+</div>
+
   <form *ngIf="!loading" [formGroup]="formTrip" (ngSubmit)="onSubmit()">
     <div class="form-group row">
 
       <div class="p-2 col-6 p-field">
         <label for="start">Endereço de partida</label>
         <div>
-          <p-autoComplete 
+          <p-autoComplete
             class="w-100"
-            id="start" 
-            [suggestions]="filteredStartAddresses" 
-            (completeMethod)="getAddress($event,'start')" 
-            field="description" 
-            [forceSelection]="true" 
-            [minLength]="5" 
+            id="start"
+            [suggestions]="filteredStartAddresses"
+            (completeMethod)="getAddress($event,'start')"
+            field="description"
+            [forceSelection]="true"
+            [minLength]="5"
             (onSelect)="getDistance()"
             formControlName="startAddress"
-            placeholder="Digite o endereço de partida" 
-            [completeOnFocus]="true" 
+            placeholder="Digite o endereço de partida"
+            [completeOnFocus]="true"
           ></p-autoComplete>
         </div>
       </div>
@@ -31,52 +42,52 @@
       <div class="p-2 col-6 p-field">
         <label for="end">Endereço de chegada</label>
         <div>
-          <p-autoComplete 
-            id="end" 
+          <p-autoComplete
+            id="end"
             class="w-100"
-            [suggestions]="filteredEndAddresses" 
+            [suggestions]="filteredEndAddresses"
             formControlName="endAddress"
-            (completeMethod)="getAddress($event,'end')" 
-            field="description" 
-            [forceSelection]="true" 
-            [minLength]="5" 
+            (completeMethod)="getAddress($event,'end')"
+            field="description"
+            [forceSelection]="true"
+            [minLength]="5"
             (onSelect)="getDistance()"
-            placeholder="Digite o endereço de chegada" 
-            [completeOnFocus]="true" 
+            placeholder="Digite o endereço de chegada"
+            [completeOnFocus]="true"
           ></p-autoComplete>
         </div>
       </div>
-      
+
 
       <div class="p-2 col-6 p-field">
         <label for="nmDriver">Nome do motorista</label>
-        <p-select 
-          class="w-100" 
-          id="nmDriver" 
-          [options]="drivers" 
-          optionLabel="nmDriver" 
-          placeholder="Selecionar" 
-          formControlName="idDriver" 
-          optionValue="idDriver" 
+        <p-select
+          class="w-100"
+          id="nmDriver"
+          [options]="drivers"
+          optionLabel="nmDriver"
+          placeholder="Selecionar"
+          formControlName="idDriver"
+          optionValue="idDriver"
         />
       </div>
 
       <div class="p-2 col-6 p-field">
         <label for="nmPassanger">Nome do passageiro</label>
-        <p-select 
-          class="w-100" 
-          id="nmPassanger" 
-          [options]="passangers" 
-          optionLabel="nmPassanger" 
-          placeholder="Selecionar" 
-          formControlName="idPassanger" 
-          optionValue="idPassanger" 
+        <p-select
+          class="w-100"
+          id="nmPassanger"
+          [options]="passangers"
+          optionLabel="nmPassanger"
+          placeholder="Selecionar"
+          formControlName="idPassanger"
+          optionValue="idPassanger"
         />
       </div>
 
       <div class="p-2 col-6 p-field">
         <label for="value">Valor por Kilômetro</label>
-        <input 
+        <input
           id="value"
           class="form-control"
           pInputText

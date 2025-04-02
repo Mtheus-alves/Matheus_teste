@@ -6,8 +6,9 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class AddressService {
-  private placesUrl: string = '/api/maps/api/place/autocomplete/json';
-  private distanceUrl: string = '/api/maps/api/distancematrix/json';
+  private corsProxy: string = 'https://cors-anywhere.herokuapp.com/';
+  private placesUrl: string = `${this.corsProxy}https://maps.googleapis.com/maps/api/place/autocomplete/json`;
+  private distanceUrl: string = `${this.corsProxy}https://maps.googleapis.com/maps/api/distancematrix/json`;
   private key: string = 'AIzaSyDFrkGbDP4c2Dowk80qjflJKXb1jNco5T8';
 
   constructor(private http: HttpClient) {}

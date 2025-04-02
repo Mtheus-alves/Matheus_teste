@@ -3,7 +3,7 @@ import { TripService } from '../../services/trip.service';
 import { PassangerService } from '../../services/passanger.service';
 import { DriverService } from '../../services/driver.service';
 import { DatePipe, CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { provideNgxMask, NgxMaskDirective } from 'ngx-mask';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -14,38 +14,47 @@ import { ToastModule } from 'primeng/toast';
 import { Driver } from '../../driver/driver';
 import { Passanger } from '../../passanger/Passanger';
 import { Trip } from '../trip';
-import { Subscription } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
+import { AddressService } from '../../services/address.service';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 
 @Component({
   selector: 'app-create-trip-modal',
   templateUrl: './create-trip-modal.component.html',
   providers: [MessageService, provideNgxMask(), DatePipe],
-  imports: [Dialog, ButtonModule, InputTextModule, SelectModule, ReactiveFormsModule, CommonModule, ToastModule, NgxMaskDirective],
+  imports: [Dialog, ButtonModule, InputTextModule, SelectModule, FormsModule, ReactiveFormsModule, CommonModule, ToastModule, NgxMaskDirective, AutoCompleteModule],
   styleUrls: ['./create-trip-modal.component.scss']
 })
 export class CreateTripModalComponent implements OnInit, OnDestroy {
   @Output() attTable: EventEmitter<any> = new EventEmitter();
-  loading: boolean = false
   subscription: Subscription = new Subscription()
+
+  filteredStartAddresses: any
+  filteredEndAddresses: any
+  distance: any = {}
+
+  loading: boolean = false
+  visible: boolean = false;
+  kmValue: string = ""
 
   drivers: Driver[] = []
   passangers: Passanger[] = []
-  trip: Trip = { tripValue: -1, idDriver: -1, idPassanger: -1 }
-  visible: boolean = false;
+  trip: Trip = { tripValue: -1, idDriver: -1, idPassanger: -1, endAddress: null, startAddress: null }
   formTrip!: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private tripService: TripService, private passangerService: PassangerService, private driverService: DriverService, private messageService: MessageService) { }
+  constructor(private formBuilder: FormBuilder, private tripService: TripService, private passangerService: PassangerService, private driverService: DriverService, private messageService: MessageService, private addressService: AddressService) { }
   ngOnDestroy(): void {
     this.subscription.unsubscribe()
   }
 
   ngOnInit() {
-    this.getDrivers()
-    this.getPassangers()
+    this.loadData();
 
     this.formTrip = this.formBuilder.group({
       idDriver: ['', Validators.required],
       idPassanger: ['', Validators.required],
+      startAddress: ['', Validators.required],
+      endAddress: ['', Validators.required],
       tripValue: ['', Validators.required],
     });
   }
@@ -54,31 +63,29 @@ export class CreateTripModalComponent implements OnInit, OnDestroy {
     this.visible = true;
   }
 
-  getDrivers() {
-    this.subscription.add(this.driverService.getDrivers().subscribe({
-      next: (res) => {
-        this.drivers = res.filter((driver: Driver) => driver.status === true);
-      },
-      error: (err) => {
-        console.error('Erro ao buscar motoristas', err);
-      }
-    }));
+  loadData() {
+    this.subscription.add(
+      forkJoin({
+        drivers: this.driverService.getDrivers(),
+        passangers: this.passangerService.getPassangers()
+      }).subscribe({
+        next: ({ drivers, passangers }) => {
+          this.drivers = drivers.filter((driver: Driver) => driver.status === true);
+          this.passangers = passangers;
+        },
+        error: () => {
+          this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao carregar dados' });
+        }
+      })
+    );
   }
 
-  getPassangers() {
-    this.subscription.add(this.passangerService.getPassangers().subscribe({
-      next: (res) => {
-        this.passangers = res
-      },
-      error: (err) => {
-        console.error('Erro ao buscar passageiros', err);
-      }
-    }));
-  }
 
   onSubmit() {
     this.loading = true
     this.trip = this.formTrip.value
+    this.trip.startAddress = this.trip.startAddress.description
+    this.trip.endAddress = this.trip.endAddress.description
 
     if (this.formTrip.valid) {
       this.subscription.add(this.tripService.postTrip(this.trip).subscribe({
@@ -86,15 +93,40 @@ export class CreateTripModalComponent implements OnInit, OnDestroy {
           this.formTrip.reset();
           this.loading = false;
           this.visible = false
+          this.kmValue = ""
           this.messageService.add({ severity: 'success', summary: 'Sucesso!', detail: 'Corrida adicionada com sucesso!' });
           this.attTable.emit()
         },
         error: () => {
+          this.loading = false
           this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Erro ao adicionar corrida!' });
         }
       }));
 
     }
-
   }
+
+  getAddress(event: any, type: string) {
+    this.subscription.add(this.addressService.getAddresses(event.query).subscribe((res) => {
+      type == "start" ? this.filteredStartAddresses = res.predictions : this.filteredEndAddresses = res.predictions
+    }));
+  }
+
+  getDistance() {
+    if (this.formTrip.get('startAddress')?.valid && this.formTrip.get('endAddress')?.valid) {
+      this.subscription.add(
+        this.addressService.getDistanceBetweenAddresses(this.formTrip.get('startAddress')?.value.description, this.formTrip.get('endAddress')?.value.description).subscribe((res) => {
+          this.distance = res.rows[0].elements[0]
+        }));
+    }
+  }
+
+  calculateTripValue() {
+    if (this.distance.distance.value && this.kmValue != "") {
+      const meterValue = Number(this.kmValue) / 1000
+      this.formTrip.patchValue({ tripValue: (meterValue * this.distance.distance.value).toFixed(2) });
+    }
+  }
+
 }
+

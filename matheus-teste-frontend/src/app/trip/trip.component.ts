@@ -23,11 +23,13 @@ export class TripComponent implements OnInit, OnDestroy {
   tableCols: GenericTableCols[] = [
     { field: 'nmDriver', header: 'Nome do Motorista' },
     { field: 'nmPassanger', header: 'Nome do passageiro' },
+    { field: 'startAddress', header: 'Endereço de partida' },
+    { field: 'endAddress', header: 'Endereço de chegada' },
     { field: 'tripValue', header: 'Valor da corrida' },
   ]
 
   constructor(private tripService: TripService, private currencyPipe: CurrencyPipe) { }
-  
+
   ngOnDestroy(): void {
     this.subscription.unsubscribe()
   }
@@ -46,8 +48,7 @@ export class TripComponent implements OnInit, OnDestroy {
         }));
         this.loading = false;
       },
-      error: (err) => {
-        console.error('Erro ao buscar motoristas', err);
+      error: () => {
         this.loading = false;
       }
     }));
@@ -58,8 +59,7 @@ export class TripComponent implements OnInit, OnDestroy {
       next: () => {
         this.getTrips()
       },
-      error: (err) => {
-        console.error('Erro ao deletar motorista', err);
+      error: () => {
         this.loading = false;
       }
     }))

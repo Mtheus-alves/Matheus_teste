@@ -32,11 +32,8 @@ export class PassangerComponent implements OnInit, OnDestroy {
   constructor(private passangerService: PassangerService, private datePipe: DatePipe, private messageService: MessageService) { }
 
   ngOnInit() {
-    try {
-      this.getPassangers();
-    } catch (error) {
-      console.error('Erro no ngOnInit', error);
-    }
+    this.getPassangers();
+
   }
 
   ngOnDestroy() {
@@ -54,8 +51,7 @@ export class PassangerComponent implements OnInit, OnDestroy {
         }));
         this.loading = false;
       },
-      error: (err) => {
-        console.error('Erro ao buscar motoristas', err);
+      error: () => {
         this.loading = false;
       }
     }));

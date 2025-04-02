@@ -51,8 +51,7 @@ export class DriverComponent implements OnInit, OnDestroy {
         }));
         this.loading = false;
       },
-      error: (err) => {
-        console.error('Erro ao buscar motoristas', err);
+      error: () => {
         this.loading = false;
       }
     }));
@@ -79,8 +78,7 @@ export class DriverComponent implements OnInit, OnDestroy {
       next: () => {
         this.getDrivers()
       },
-      error: (err) => {
-        console.error('Erro ao atualizar status do motorista', err);
+      error: () => {
         this.loading = false;
       }
     }))

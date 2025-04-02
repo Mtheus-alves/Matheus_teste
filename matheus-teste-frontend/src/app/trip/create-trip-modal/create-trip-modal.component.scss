@@ -1,1 +1,11 @@
 @import url(../../../styles.scss);
+
+:host ::ng-deep {
+    .p-inputtext{
+        width: 100%;
+    }
+
+    .p-autocomplete{
+        width: 100%;
+    }
+}

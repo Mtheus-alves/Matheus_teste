@@ -10,10 +10,49 @@
     <div class="form-group row">
 
       <div class="p-2 col-6 p-field">
-        <label for="status">Nome do motorista</label>
+        <label for="start">Endereço de partida</label>
+        <div>
+          <p-autoComplete 
+            class="w-100"
+            id="start" 
+            [suggestions]="filteredStartAddresses" 
+            (completeMethod)="getAddress($event,'start')" 
+            field="description" 
+            [forceSelection]="true" 
+            [minLength]="5" 
+            (onSelect)="getDistance()"
+            formControlName="startAddress"
+            placeholder="Digite o endereço de partida" 
+            [completeOnFocus]="true" 
+          ></p-autoComplete>
+        </div>
+      </div>
+
+      <div class="p-2 col-6 p-field">
+        <label for="end">Endereço de chegada</label>
+        <div>
+          <p-autoComplete 
+            id="end" 
+            class="w-100"
+            [suggestions]="filteredEndAddresses" 
+            formControlName="endAddress"
+            (completeMethod)="getAddress($event,'end')" 
+            field="description" 
+            [forceSelection]="true" 
+            [minLength]="5" 
+            (onSelect)="getDistance()"
+            placeholder="Digite o endereço de chegada" 
+            [completeOnFocus]="true" 
+          ></p-autoComplete>
+        </div>
+      </div>
+      
+
+      <div class="p-2 col-6 p-field">
+        <label for="nmDriver">Nome do motorista</label>
         <p-select 
           class="w-100" 
-          id="status" 
+          id="nmDriver" 
           [options]="drivers" 
           optionLabel="nmDriver" 
           placeholder="Selecionar" 
@@ -23,10 +62,10 @@
       </div>
 
       <div class="p-2 col-6 p-field">
-        <label for="status">Nome do passageiro</label>
+        <label for="nmPassanger">Nome do passageiro</label>
         <p-select 
           class="w-100" 
-          id="status" 
+          id="nmPassanger" 
           [options]="passangers" 
           optionLabel="nmPassanger" 
           placeholder="Selecionar" 
@@ -36,17 +75,25 @@
       </div>
 
       <div class="p-2 col-6 p-field">
-      <label for="value">Valor</label>
+        <label for="value">Valor por Kilômetro</label>
         <input 
           id="value"
           class="form-control"
-          formControlName="tripValue"
           pInputText
           mask="separator.2"
           prefix="R$ "
           thousandSeparator="."
           decimalMarker=","
+          (input)="calculateTripValue()"
+          [(ngModel)]="kmValue"
+          [ngModelOptions]="{standalone: true}"
         />
+      </div>
+
+      <div class="p-2 col-6 d-flex align-items-end justify-content-center">
+       Distância total : {{ distance?.distance?.text ? distance.distance.text : ''| uppercase}} <br>
+       Valor da Corrida: {{ formTrip.get('tripValue')?.value | currency:'BRL':'symbol':'1.2-2' }}
+
       </div>
 
       <p-button [disabled]="!formTrip.valid" type="submit" class="mt-3 btn-create" label="Adicionar"></p-button>

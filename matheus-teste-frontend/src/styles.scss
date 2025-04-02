@@ -9,4 +9,8 @@
         background-color: #047e4f;
         border: 1px solid #047e4f;
     }
+
+    .p-dialog-content {
+        overflow-y: clip; 
+    }
 }

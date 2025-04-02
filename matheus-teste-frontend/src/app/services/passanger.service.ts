@@ -31,7 +31,6 @@ export class PassangerService {
   }
 
   private handleError(error: any): Observable<never> {
-    console.error('Erro na requisição:', error);
     return throwError(() => new Error('Erro ao buscar dados. Tente novamente mais tarde.'));
   }
 }

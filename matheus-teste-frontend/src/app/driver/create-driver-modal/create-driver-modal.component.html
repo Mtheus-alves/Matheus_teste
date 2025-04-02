@@ -16,22 +16,54 @@
 
       <div class="p-2 col-6 p-field">
         <label for="dtBirth">Data de nascimento</label>
-        <input pInputText  mask="00/00/0000" id="dtBirth" class="form-control" formControlName="dtBirth" />
+        <input
+          pInputText
+          mask="00/00/0000"
+          id="dtBirth"
+          class="form-control"
+          formControlName="dtBirth"
+          [ngClass]="{
+            'is-invalid': formDriver.get('dtBirth')?.invalid && formDriver.get('dtBirth')?.touched
+          }"
+        />
+        <div
+          *ngIf="formDriver.get('dtBirth')?.invalid && formDriver.get('dtBirth')?.touched"
+          class="error-message"
+        >
+          Data inválida ou menor de 18 anos!
+        </div>
       </div>
 
       <div class="p-2 col-6 p-field">
         <label for="cpf">CPF</label>
-        <input mask="000.000.000-00" pInputText id="cpf" class="form-control" formControlName="cpf" />
+        <input 
+          [ngClass]="{'is-invalid': formDriver.get('cpf')?.invalid && formDriver.get('cpf')?.touched}" 
+          mask="000.000.000-00" 
+          pInputText id="cpf" 
+          class="form-control" 
+          formControlName="cpf"
+        />
+        <div *ngIf="formDriver.get('cpf')?.invalid && formDriver.get('cpf')?.touched" class="error-message">
+          CPF inválido!
+        </div>
+      </div>
+
+      <div class="p-2 col-6 p-field">
+        <label for="gender">Gênero</label>
+        <p-select 
+          class="w-100" 
+          id="gender" 
+          [options]="gender" 
+          optionLabel="value" 
+          placeholder="Selecionar" 
+          formControlName="gender" 
+          optionValue="value" 
+        />
       </div>
 
       <div class="p-2 col-6 p-field">
         <label for="modelCar">Modelo do carro</label>
         <input pInputText id="modelCar" class="form-control" formControlName="modelCar" />
-      </div>
-
-      <div class="p-2 col-6 p-field">
-        <label for="gender">Sexo</label>
-        <input pInputText id="gender" class="form-control" formControlName="gender" />
       </div>
 
       <div class="p-2 col-6 p-field">

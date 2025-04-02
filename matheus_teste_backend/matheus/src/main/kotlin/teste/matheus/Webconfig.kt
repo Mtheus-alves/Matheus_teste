@@ -13,6 +13,5 @@ package teste.matheus
              .allowedHeaders("*")  
              .allowCredentials(true)
      }
-     
  }
  

@@ -8,7 +8,7 @@ package teste.matheus
  class CorsConfig : WebMvcConfigurer {
      override fun addCorsMappings(registry: CorsRegistry) {
          registry.addMapping("/**")
-             .allowedOriginPatterns("*")  
+             // .allowedOriginPatterns("*")  
              .allowedMethods("*")  
              .allowedHeaders("*")  
              .allowCredentials(true)

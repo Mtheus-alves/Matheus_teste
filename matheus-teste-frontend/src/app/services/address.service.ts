@@ -1,16 +1,16 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AddressService {
-  private placesUrl: string = "https://maps.googleapis.com/maps/api/place/autocomplete/json";
-  private distanceUrl: string = "https://maps.googleapis.com/maps/api/distancematrix/json";
-  private key: string = "AIzaSyDFrkGbDP4c2Dowk80qjflJKXb1jNco5T8"
+  private placesUrl: string = '/api/maps/api/place/autocomplete/json';
+  private distanceUrl: string = '/api/maps/api/distancematrix/json';
+  private key: string = 'AIzaSyDFrkGbDP4c2Dowk80qjflJKXb1jNco5T8';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getAddresses(address: string): Observable<any> {
     const params = {

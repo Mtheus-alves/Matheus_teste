@@ -24,7 +24,6 @@
             formControlName="startAddress"
             placeholder="Digite o endereço de partida" 
             [completeOnFocus]="true" 
-            (onSelect)="calculateTripValue()"
           ></p-autoComplete>
         </div>
       </div>
@@ -44,7 +43,6 @@
             (onSelect)="getDistance()"
             placeholder="Digite o endereço de chegada" 
             [completeOnFocus]="true" 
-            (onSelect)="calculateTripValue()"
           ></p-autoComplete>
         </div>
       </div>

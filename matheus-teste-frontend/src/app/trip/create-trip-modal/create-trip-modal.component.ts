@@ -91,6 +91,7 @@ export class CreateTripModalComponent implements OnInit, OnDestroy {
           this.loading = false;
           this.visible = false
           this.kmValue = ""
+          this.distance = ""
           this.messageService.add({ severity: 'success', summary: 'Sucesso!', detail: 'Corrida adicionada com sucesso!' });
           this.attTable.emit()
         },
@@ -114,6 +115,7 @@ export class CreateTripModalComponent implements OnInit, OnDestroy {
       this.subscription.add(
         this.addressService.getDistanceBetweenAddresses(this.formTrip.get('startAddress')?.value.description, this.formTrip.get('endAddress')?.value.description).subscribe((res) => {
           this.distance = res.rows[0].elements[0]
+          this.calculateTripValue()
         }));
     }
   }

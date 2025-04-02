@@ -72,9 +72,6 @@ export class CreateTripModalComponent implements OnInit, OnDestroy {
         next: ({ drivers, passangers }) => {
           this.drivers = drivers.filter((driver: Driver) => driver.status === true);
           this.passangers = passangers;
-        },
-        error: () => {
-          this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao carregar dados' });
         }
       })
     );
